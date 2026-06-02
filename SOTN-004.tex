@@ -151,31 +151,43 @@ The table below presents a current set of known image quality issues under activ
 \centering
 \caption{Summary of issues and mitigations}
 \label{tab:issues}
-\begin{tabular}{p{4cm} p{9cm} p{2cm}}
+\begin{tabular}{p{4.5cm} p{9cm} p{1.5cm}}
 \hline
 \multicolumn{3}{c}{\textbf{Areas of AOS Active Research and Development -- Section \ref{sec:aos_active}}} \\
 \hline
-u,y band IQ & Angle-of-Incidence correction & June 2026 \\
-Donut selection and fit quality & WCS-based donut selection; pupil model, unbinned fit & June 2026 \\
-AOS closed-loop control algorithm & Optimize PID, adding I term; use predictive control algorithm such as Smith Predictor or Kalman Filter & July 2026 \\
-AOS closed-loop correction latency & Achieve consistent N+2 latency 97\% of the time through algorithm improvements & July 2026 \\
-Optimized optical state (fixed pointing) & Implement measured intrinsic wavefront and single valued LUT & June 2026 \\
-Optimized optical state (survey mode) & Perform bounce test blocks to build Elevation / rotator LUT & August 2026 \\
-Tracking drift & Apply synchronized AOS and pointing corrections & June 2026 \\
+u,y band IQ & Angle-of-Incidence correction & Jun 2026 \\
+\hline
+Donut selection and fit quality & WCS-based donut selection; pupil model, unbinned fit & Jun 2026 \\
+\hline
+AOS closed-loop control algorithm & Optimize PID, adding I term; use predictive control algorithm such as Smith Predictor or Kalman Filter & Jul 2026 \\
+\hline
+AOS closed-loop correction latency & Achieve consistent N+2 latency 97\% of the time through algorithm improvements & Jul 2026 \\
+\hline
+Optimized optical state (fixed pointing) & Implement measured intrinsic wavefront and single valued LUT & Jun 2026 \\
+\hline
+Optimized optical state (survey mode) & Perform bounce test blocks to build Elevation / rotator LUT & Aug 2026 \\
+\hline
+Tracking drift & Apply synchronized AOS and pointing corrections & Jun 2026 \\
 \hline
 \multicolumn{3}{c}{\textbf{Areas of Active Research and Optimization of the Environment Control -- Section \ref{sec:medium_term}}} \\
 \hline
 Dome thermal environment & Dome Louvers; facility HVAC; increase insulation for thermal sources & various \\
+\hline
 M1M3 thermal control &  M1M3 nozzles; M1M3 Glycol pump and valves; control loop optimization & various \\
+\hline
 Heat sources near optical beam & Continue regular thermal surveys; hexapod idle feature; heat sources on Top End Assembly; M1M3 Mirror cover motors & various \\
-Difference in Intra/Extra Donuts & Explore Pupil Model and Donut Fitting options & June 2026 \\
+\hline
+Difference in Intra/Extra Donuts & Explore Pupil Model and Donut Fitting options & Jun 2026 \\
 \hline
 \multicolumn{3}{c}{\textbf{Longer Term AOS Optimization -- Section \ref{sec:longer_term}}} \\
 \hline
-ML-based Wavefront Estimation Methods & Tune training, Brief on-sky tests, Quantitative Assessment of Performance & July 2026 \\
+ML-based Wavefront Estimation Methods & Tune training, Brief on-sky tests, Quantitative Assessment of Performance & Jul 2026 \\
+\hline
 IQ Optimization and Survey Strategy & Study interplay of IQ conditions on LSST Survey & 2027 \\
+\hline
 Temperature LUT & Additional temperature sensors; study the variation of focus as a function of temperature, after the M1M3 thermal control is optimized & 2027 \\
-Complete Optimization of the open-loop model & Optimize the open-loop model looking at trends in the corrections as a function of parameters such as elevation, rotation; will also need to do it with the intrinsics & after July 2027 \\
+\hline
+Complete Optimization of the open-loop model & Optimize the open-loop model looking at trends in the corrections as a function of parameters such as elevation, rotation; will also need to do it with the intrinsics & late 2027 \\
 \hline
 \end{tabular}
 \end{table}
