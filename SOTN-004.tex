@@ -145,11 +145,47 @@ In practice, it is expected that progress will be made on multiple aspects of th
 
 The table below presents a current set of known image quality issues under active study and development where we have clear plans on how to mitigate / improve performance within the next 6-12 months. Section 3 provides a description of each item.
 
+\begin{table}
+\footnotesize
+%\tiny
+\centering
+\caption{Summary of issues and mitigations}
+\label{tab:issues}
+\begin{tabular}{p{4cm} p{9cm} p{2cm}}
+\hline
+\multicolumn{3}{c}{\textbf{Areas of AOS Active Research and Development -- Section \ref{sec:aos_active}}} \\
+\hline
+u,y band IQ & Angle-of-Incidence correction & June 2026 \\
+Donut selection and fit quality & WCS-based donut selection; pupil model, unbinned fit & June 2026 \\
+AOS closed-loop control algorithm & Optimize PID, adding I term; use predictive control algorithm such as Smith Predictor or Kalman Filter & July 2026 \\
+AOS closed-loop correction latency & Achieve consistent N+2 latency 97\% of the time through algorithm improvements & July 2026 \\
+Optimized optical state (fixed pointing) & Implement measured intrinsic wavefront and single valued LUT & June 2026 \\
+Optimized optical state (survey mode) & Perform bounce test blocks to build Elevation / rotator LUT & August 2026 \\
+Tracking drift & Apply synchronized AOS and pointing corrections & June 2026 \\
+\hline
+\multicolumn{3}{c}{\textbf{Areas of Active Research and Optimization of the Environment Control -- Section \ref{sec:medium_term}}} \\
+\hline
+Dome thermal environment & Dome Louvers; facility HVAC; increase insulation for thermal sources & various \\
+M1M3 thermal control &  M1M3 nozzles; M1M3 Glycol pump and valves; control loop optimization & various \\
+Heat sources near optical beam & Continue regular thermal surveys; hexapod idle feature; heat sources on Top End Assembly; M1M3 Mirror cover motors & various \\
+Difference in Intra/Extra Donuts & Explore Pupil Model and Donut Fitting options & June 2026 \\
+\hline
+\multicolumn{3}{c}{\textbf{Longer Term AOS Optimization -- Section \ref{sec:longer_term}}} \\
+\hline
+ML-based Wavefront Estimation Methods & Tune training, Brief on-sky tests, Quantitative Assessment of Performance & July 2026 \\
+IQ Optimization and Survey Strategy & Study interplay of IQ conditions on LSST Survey & 2027 \\
+Temperature LUT & Additional temperature sensors; study the variation of focus as a function of temperature, after the M1M3 thermal control is optimized & 2027 \\
+Complete Optimization of the open-loop model & Optimize the open-loop model looking at trends in the corrections as a function of parameters such as elevation, rotation; will also need to do it with the intrinsics & after July 2027 \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Summary of Open Issues}
 
 The table below summarizes several outstanding open questions and exploratory efforts where issues are being diagnosed and detailed work plans are under development. Each item is discussed individually in Section 3.
 
 \section{Areas of AOS Active Research and Development}
+\label{sec:aos_active}
 
 We describe specific areas of active research and development with more details on current challenges and plans for each area.
 
@@ -228,6 +264,7 @@ Pointing offsets related to the AOS optics corrections are predictable based on 
 On-sky validation of the pointing accuracy and synchronized AOS and pointing corrections can be accomplished through standard sequences of the AOS closed loop initial focus and alignment at the start of night, and during regular wide-area survey observations, and thus minimal dedicated on-sky engineering is expected.
 
 \section{Areas of Active Research and Optimization of the Environmental control}
+\label{sec:medium_term}
 
 \subsection{Dome thermal environment}
 
@@ -268,6 +305,7 @@ In practice, the extra-focal pupil fit results currently dominate the overall wa
 Investigations into possible physical origins of apparent differences in the intra- and extra-focal images are under way, including studies of the pupil model (Section 3.X) and subtle diffraction effects.
 
 \section{Longer Term AOS Optimization}
+\label{sec:longer_term}
 
 \subsection{ML-based Wavefront Estimation Methods}
 
@@ -304,7 +342,7 @@ Supplemental information on general principles for work management, version cont
 
 \subsection{Work Management}
 
-Analysis and development tasks to support image quality improvements are captured, ranked by priority, and have their progress and outcomes recorded used the Jira epic RSO-9
+Analysis and development tasks to support image quality improvements are captured, ranked by priority, and have their progress and outcomes recorded used the Jira epic \href{https://rubinobs.atlassian.net/browse/RSO-9}{RSO-9}.
 
 \subsection{Version Control}
 
@@ -327,14 +365,14 @@ Process for deployment of new algorithm/versions/configuration at the summit:
 
 Resources used
 \begin{itemize}
-  \item Software Versioning Acceptance Board \url{https://rubinobs.atlassian.net/wiki/spaces/LSSTOps/pages/1248460829/Software+Versioning+Acceptance+Board}
-  \item Tracking AOS Deployment Confluence
+  \item Software Versioning Acceptance Board \href{https://rubinobs.atlassian.net/wiki/spaces/LSSTOps/pages/1248460829/Software+Versioning+Acceptance+Board}{Confluence page}
+  \item Tracking AOS Deployment \href{https://rubinobs.atlassian.net/wiki/spaces/LTS/pages/1681391688/AOS+Deployment+Status}{Confluenc page}
   \item Spreadsheet w/ configuration status: AOS Configuration Changes
 \end{itemize}
 
 \subsection{On-sky Test Planning}
 
-The Rubin Observatory Summit Facility Concept of Operations is described in RTN-094.
+The Rubin Observatory Summit Facility Concept of Operations is described in \citep{RTN-094}.
 
 During the current period with frequent AOS configuration updates and dedicated on-sky engineering tests interleaved with survey observations on a regular basis (e.g., multiple nights per week), we have used test planning on 1-2 week timescales to help connect strategic priorities to the development and execution of individual night test plans. The 1-2 week planning timescale facilitates development of new observing blocks, arranging the schedule of specific feature deployments, and coordinating with other summit activities, including daytime engineering and summit software updates. We outline draft day-by-day test plans with a ~7 day lookahead, and detailed day-by-day plans with a 2-3 day lookahead.
 
