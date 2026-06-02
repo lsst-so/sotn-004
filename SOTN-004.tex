@@ -298,6 +298,52 @@ This area of investigation broadly covers mitigations for image quality impacts 
 
 Currently, there is a focus offset LUT for each filter and a two-dimensional LUT for telescope elevation and rotator angle. As other aspects of the AOS stabilize, and telemetry correlation analyses are performed with additional survey data, further image quality gains might be realized by incorporating additional telemetry streams into open loop AOS corrections. For example, additional temperature sensors on the telescope structure and for M1M3 might be more predictive of the rapid focus drifts. M1M3 thermal gradients might be used to predict mirror figure changes that are not easily measured using the corner wavefront sensors.
 
+\section{Methodology Notes and Resources}
+
+Supplemental information on general principles for work management, version control, and the development of on-sky tests.
+
+\subsection{Work Management}
+
+Analysis and development tasks to support image quality improvements are captured, ranked by priority, and have their progress and outcomes recorded used the Jira epic RSO-9
+
+\subsection{Version Control}
+
+All of the planned AOS improvement tests will be interleaved with routine survey operations. From May 2026 onwards, there is increased emphasis on stable delivery of acceptable science-grade images, even as new AOS features and configuration updates are deployed to the summit. It is essential to ensure rigorous tracking of code versions, configurations of the MTAOS, open loop LUT version, intrinsic aberration model, values of any constant offsets applied, number of degrees of freedom enabled and truncation index for the basis of characteristic non-degenerate v-modes. Software versions deployed at the summit will be tagged following a standardized convention.
+
+Process for deployment of new algorithm/versions/configuration at the summit:
+\begin{itemize}
+  \item Maintain 2-3 day look-ahead for specific upcoming deployments to coordinate with on-sky test planning
+  \item Proposed configuration changes must be approved by the Software Versioning Acceptance Board (SVAB) prior to be deployed at the summit
+  \item Summit deployments that are not completed before the tailgate 4:30pm Chile will be postponed to the next opportunity
+  \item Preference to schedule deployments Tuesday-Thursday; Monday + Friday as second choice; Deployment on Saturday and Sunday will only be for emergency fixes.
+  \item Preference for atomic updates; avoid more than one new deployment per night and all deployments need to be tracked using the confluence page above.
+  \item Before deployment, determine what is the current stable tagged configuration version that we would revert to if needed
+  \item After deployment, use the following sequence of on-sky tests to evaluate performance
+  \begin{itemize}
+    \item FBS-driven closed loop stability for 1-2 hrs at fixed telescope (elevation, azimuth, rotator angle, filter)
+    \item Pre-LSST to evaluate performance in wide-area survey mode
+  \end{itemize}
+\end{itemize}
+
+Resources used
+\begin{itemize}
+  \item Software Versioning Acceptance Board \url{https://rubinobs.atlassian.net/wiki/spaces/LSSTOps/pages/1248460829/Software+Versioning+Acceptance+Board}
+  \item Tracking AOS Deployment Confluence
+  \item Spreadsheet w/ configuration status: AOS Configuration Changes
+\end{itemize}
+
+\subsection{On-sky Test Planning}
+
+The Rubin Observatory Summit Facility Concept of Operations is described in RTN-094.
+
+During the current period with frequent AOS configuration updates and dedicated on-sky engineering tests interleaved with survey observations on a regular basis (e.g., multiple nights per week), we have used test planning on 1-2 week timescales to help connect strategic priorities to the development and execution of individual night test plans. The 1-2 week planning timescale facilitates development of new observing blocks, arranging the schedule of specific feature deployments, and coordinating with other summit activities, including daytime engineering and summit software updates. We outline draft day-by-day test plans with a ~7 day lookahead, and detailed day-by-day plans with a 2-3 day lookahead.
+
+Reminder of the sources used
+\begin{itemize}
+  \item Week Test Plan (Confluence pages, Canvas)
+  \item Day-by-day detail test planning (maintain 2-3 day look-ahead) Canvas
+\end{itemize}
+
 
 \appendix
 
