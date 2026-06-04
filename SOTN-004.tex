@@ -1,4 +1,4 @@
-\documentclass[SE,lsstdraft,authoryear,toc]{lsstdoc}
+\documentclass[SO,lsst,authoryear,toc]{lsstdoc}
 \input{meta}
 
 % Package imports go here.
@@ -22,7 +22,10 @@
 % Optional subtitle
 % \setDocSubtitle{A subtitle}
 
-\input{authors}
+%\input{authors}
+\author{%
+NSF-DOE Vera C. Rubin Observatory
+}
 
 \setDocRef{SOTN-004}
 \setDocUpstreamLocation{\url{https://github.com/lsst-so/sotn-004}}
@@ -33,7 +36,10 @@
 % \setDocCurator{The Curator of this Document}
 
 \setDocAbstract{%
-Image quality improvement plan based on analyses and experience from the Early Operations system optimization period.
+As of June 2026, the delivered image quality from the Vera C. Rubin Observatory is not yet meeting design specifications for the total system contribution to the PSF FWHM, ellipticity, and uniformity of the PSF size and shape across the field of view.
+A technical pathway exists to meet all of the SRD design specifications with continued work on the Active Optics System (AOS) and environment control.
+We present an image quality improvement plan based analyses and experience from the Early Operations system optimization period, including strategy, priorities, milestones for image quality improvements.
+We detail currently known issues, and describe the offline analyses, on-sky engineering needs, daytime engineering needs, and expected timeline to resolve each issue.
 }
 
 % Change history defined here.
@@ -41,7 +47,7 @@ Image quality improvement plan based on analyses and experience from the Early O
 % Fields: VERSION, DATE, DESCRIPTION, OWNER NAME.
 % See LPM-51 for version number policy.
 \setDocChangeRecord{%
-  \addtohist{1}{YYYY-MM-DD}{Unreleased.}{Bechtol}
+  \addtohist{1}{2026-06-03}{Initial version.}{Keith Bechtol}
 }
 
 
@@ -54,6 +60,484 @@ Image quality improvement plan based on analyses and experience from the Early O
 
 % ADD CONTENT HERE
 % You can also use the \input command to include several content files.
+
+\section{Introduction}
+
+This technote provides a snapshot of plans as of June 2026 to improve the delivered image quality at the Vera C. Rubin Observatory based on findings from the Early Operations system optimization period.
+The June 2026 timeframe marks a transition from intensive on-sky engineering activity in March-April 2026 towards a more steady-state development cycle, with sustained wide-area pre-LSST observations driven by the Feature Based Scheduler (FBS) on most nights.
+Rather than working through a steady backlog on-sky engineering needs, targeted tests are now being performed on designated nights as specific new deployments are ready to be validated on sky.
+This is a natural moment to assess the current performance, and to consider strategies for making continued improvements largely \emph{in parallel} with sustained survey-mode observations.
+
+The technote \cite{RTN-122} reports the distribution of demonstrated performance during the Early Operations period from October 2025 through May 2026.
+The image quality from Rubin Observatory has improved substantially since the first on-sky observations with LSSTCam in April 2025, but is not yet consistently meeting design specifications in pre-LSST observations.
+%The plots below illustrate progress from construction-era Science Validation (SV) surveys in June-September 2025 up through the current Early Operations period, represented as distributions of estimates for the instrument contribution to the delivered PSF FWHM.
+While the progress during the Early Operations period is encouraging, and the current delivered image quality will enable many LSST science cases, the performance can still be improved, especially to reduce the ellipticity and to increase the uniformity of the PSF shape across the full field of view.
+%The PSF ellipticity distribution is not yet meeting the design specification, as shown in the plots below.
+
+The following sections describe planned improvements for the delivered image quality over the next months considering the ensemble of subsystems at the summit facility as well as operational procedures.
+We place particular emphasis on the Active Optics System (AOS), as the needs for continued on-sky engineering during the next months are expected to largely be driven by testing to improve the AOS performance.
+
+\section{Current Delivered Image Quality Budget}
+
+Table \ref{tab:diq_budget} summarizes the current measured and estimated system contributions to the delivered image quality budget for PSF FWHM relative to design specifications.
+The total system contribution to delivered image quality is not yet meeting design specifications, with larger than allocated contributions from the optical figure (including AOS and mirror thermal gradients) and dome seeing, in particular.
+The quoted values correspond to estimated median values of the distribution of performance.
+The tail of the distribution for the total system contribution to the delivered image quality is likely to have a larger relative optical figure contribution, as evidenced by gradients of the PSF size and shape across the full field of view.
+
+Distinguishing contributions from the dome seeing and upper atmosphere is challenging, and accordingly, we provide a range for the estimated dome seeing contribution in Table \ref{tab:diq_budget}.
+The median value of the atmospheric contribution (at 500nm at zenith) from the baseline survey simulations is 0.72''.
+An upper atmosphere seeing contribution of 0.72'' at zenith corresponds to 0.8'' at a typical median airmass of 1.2 for LSST observations.
+This atmosphere contribution added in quadrature with a total system contribution of 0.6'', including a dome seeing contribution of 0.35'', aligns well with the measured distribution of delivered image quality from pre-LSST observations with median PSF FWHM of $\sim$1.0'' in the riz bands.
+We have observed correlations of dome seeing indicators (e.g., donut blur) with wind speed and dome aperture orientation relative to the wind direction (Section \ref{sec:dome}).
+
+\begin{table}
+\centering
+\caption{Current delivered image quality budget for PSF FWHM}
+\label{tab:diq_budget}
+\begin{tabular}{lcc}
+\hline
+\textbf{Source of Degradation} &  \textbf{Budgeted} & \textbf{Measured} \\
+ & (arcsec) & (arcsec) \\
+\hline
+\textbf{Static Optics} & & \\
+Optical Figure (includes AOS and mirror thermal gradients) & 0.202 & 0.4 \\
+\textbf{Dynamic Optics} & & \\
+Top end and M1M3 vibrations & 0.091 & small, in spec \\
+Mount Motion & & \\
+Tracking drift & 0.025 & 0.1 \\
+Elevation, azimuth, rotator jitter & 0.083 & 0.02 \\
+\textbf{Seeing} & & \\
+Upper atmosphere & (not included) & (not included) \\
+Dome seeing & 0.084 & 0.3 -- 0.4 \\
+Mirror seeing & 0.027 & small, in spec \\
+Instrument & & \\
+Diffusion of photoelectrons & 0.207 & 0.207 \\
+\textbf{Total} & 0.4 & 0.55 -- 0.6 \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Image Quality Improvement Priorities, Milestones, and Overview of Current Issues}
+
+This section describes strategy, priorities, milestones for image quality improvements, and a summary of specific known issues.
+%The next sections include further details for current improvements where there is active work.
+Over the next months, as the currently known issues are addressed, and new issues emerge, the overall image quality effort will need continuous management and clear prioritization of tasks.
+
+\subsection{Progression of Technical Performance Milestones}
+
+At a high level, the current analyses, development, and dedicated on-sky tests center around two primary objectives to continue improving the delivered image quality:
+
+\begin{enumerate}
+  \item characterize the ``target'' optical state that the system is converging to at fixed telescope pointing
+  \item characterize the stability / visit-to-visit variations of delivered image quality, initially at fixed telescope pointing, and then for wide-area survey observations
+\end{enumerate}
+
+A sequential progression of technical performance milestones (with emphasis on optics control)
+
+\begin{enumerate}
+  \item Achieve design performance for delivered image quality for FBS-driven stability tests with MTAOS at a single fixed telescope pointing (elevation, azimuth, rotator angle, filter)
+  \begin{itemize}
+    \item validates that system has capability to converge to intended “target” optical state
+    \item validates stability of delivered image quality / visit-to-visit variation in most ideal observing configuration
+    \item until Rubin Observatory meets this performance benchmark, we will need regular dedicated on-sky engineering
+  \end{itemize}
+  \item Achieve design performance for delivered image quality for FBS-driven stability test with MTAOS at fixed pointing for any particular choice of (elevation, azimuth, rotator angle, filter) and for several environmental conditions
+  \begin{itemize}
+    \item validates that the system has capability to converge to the intended “target” optical state for the range of operational telescope configurations and environmental conditions.
+    \item foundational for developing and validating complete and robust open-loop model, also called look-up tables (LUTs)
+  \end{itemize}
+  \item Achieve design performance for delivered image quality in controlled experiments, such as alternating between two elevations, two rotator angles, or two filters
+  \begin{itemize}
+    \item validates application of differential corrections in the open-loop model
+  \end{itemize}
+  \item Achieve design performance for delivered image quality for standard LSST observations
+  \begin{itemize}
+    \item validates the closed-loop feedback and open-loop model together in full range of nominal operating conditions
+  \end{itemize}
+\end{enumerate}
+
+It is expected that progress will be made on multiple aspects of the delivered image quality budget at varying rates.
+Some of the issues are connected and require improvements in multiple related areas.
+For example, the performance of the active optics is somewhat correlated with the M1M3 thermal stability.
+
+\subsection{Summary of Image Quality Known Issues and Mitigations}
+
+Table \ref{tab:issues} summarizes currently known image quality issues.
+The issues are grouped approximately by timescale for expected improvements.
+
+The first category (see Section \ref{sec:aos_deployments}) includes high-priority AOS-related issues that we have clear plans to address within the next 3 months.
+For these issues, diagnostic data has already been collected that enables offline analysis and feature development, and feature deployments are already in progress.
+Several of these deployments will require some amount of dedicated on-sky engineering to validate performance in controlled tests, or to collect additional targeted diagnostic data.
+
+The second category (see Section \ref{sec:environment}) includes ongoing optimization of the environment control over the next 6-12 months, primarily through daytime engineering work that does not directly compete for on-sky time.
+Several of the issues include multiple related items, or multiple hardware components that are expected to be installed over a period of time.
+
+The third catalogy (see Section \ref{sec:aos_optimization}) includes outstanding open questions and exploratory efforts where detailed work plans are under development, and timelines for improvement are more uncertain.
+Several of these items require large statistical samples of survey observations sampling a range of environment conditions as input.
+%issues are being diagnosed and detailed work plans are under development.
+%under active study and development where we have clear plans on how to mitigate / improve performance within the next 6-12 months. Section 3 provides a description of each item.
+
+\begin{table}
+\footnotesize
+%\tiny
+\centering
+\caption{Summary of currently known delivered image quality issues}
+\label{tab:issues}
+\begin{tabular}{p{4.5cm} p{9cm} p{1.5cm}}
+\hline
+\textbf{Issue} & \textbf{Planned Developments / Mitigations} & \textbf{Resolution Timescale} \\
+\hline
+ & & \\
+\multicolumn{3}{c}{\emph{High-priority Upcoming AOS Deployments}} \\
+ & & \\
+\hline
+Donut selection and fit quality & WCS-based donut selection; pupil model; unbinned fit; numerical stability and internal consistency investigations & Jul 2026 \\
+\hline
+Optimized optical state (fixed pointing) & Implement measured intrinsic wavefront and optimized open loop model for fixed pointing & Aug 2026 \\
+\hline
+Optimized optical state (survey mode) & Perform full array mode ``bounce test'' observing blocks to build elevation / rotator LUT & Oct 2026 \\
+\hline
+AOS closed-loop correction latency & Achieve consistent N+2 latency $>$95\% of the time through algorithm improvements & Oct 2026 \\
+\hline
+AOS closed-loop control algorithm & Optimize PID controller, adding I term; use predictive control algorithm such as Smith Predictor or Kalman Filter & Oct 2026 \\
+\hline
+Tracking drift & Apply synchronized AOS and pointing corrections & Jun 2026 \\
+\hline
+u,y band image quality & Angle-of-incidence throughput correction & Jun 2026 \\
+\hline
+ & & \\
+\multicolumn{3}{c}{\emph{Ongoing Optimization of the Environment Control}} \\
+ & & \\
+\hline
+Dome thermal environment & Dome Louvers; facility HVAC; increase insulation for thermal sources & mid 2027 \\
+\hline
+M1M3 thermal control & M1M3 nozzles; M1M3 glycol pump and valves; control loop optimization & late 2026 \\
+\hline
+Heat sources near optical beam & Continue regular thermal surveys; hexapod idle feature; heat sources on Top End Assembly; M1M3 Mirror cover motors & late 2026 \\
+\hline
+ & & \\
+\multicolumn{3}{c}{\emph{Longer Term AOS Optimization}} \\
+ & & \\
+\hline
+Difference in Intra/Extra Donuts & Explore pupil model; optical modeling; targeted diagnostic data to evaluate wavefront measurement & late 2026 \\
+\hline
+ML-based Wavefront Estimation Methods & Tune training; brief on-sky tests; quantitative assessment of performance & late 2026 \\
+\hline
+IQ Optimization and Survey Strategy & Study interplay of IQ conditions on LSST Survey & 2027 \\
+\hline
+Temperature LUT & Additional temperature sensors; study the variation of focus as a function of temperature, after the M1M3 thermal control is optimized & 2027 \\
+\hline
+Complete Optimization of the open-loop model & Optimize the open-loop model looking at trends in the corrections as a function of parameters such as elevation, rotation; perform analyses together with intrinsics & late 2027 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Roadmap}
+
+We describe an example (highly simplified) roadmap to help connect individual tasks as part of an overall action plan for image quality improvement.
+
+The highest priority areas to achieve the first mileston of meeting design performance at a single fixed telescope pointing are
+\begin{itemize}
+  \item Donut selection and fit quality -- Section \ref{sec:donut}
+  \item Optimized Optical State (Fixed Pointing) -- Section \ref{sec:optical_state_fixed}
+  \item M1M3 thermal control -- Section \ref{sec:m1m3_thermal}
+\end{itemize}
+It is expected that substantial progress can be made in these areas by $\sim$September 2026.
+
+The next highest priority area to achieve design performance at arbitrary fixed telescope pointing, and in controlled experiments, is
+\begin{itemize}
+  \item Optimized optical state (survey mode) -- Section \ref{sec:optical_state_survey}
+\end{itemize}
+It is expected that substantial progress can be achieved by late 2026.
+
+The next highest priority areas to achieve design performance in survey-mode observations are
+\begin{itemize}
+  \item AOS closed-loop correction latency -- Section \ref{sec:aos_latency}
+  \item AOS closed-loop control algorithm -- Section \ref{sec:aos_control}
+\end{itemize}
+It is expected that substantial progress can be achieved by late 2026
+
+The environment control is high priority, but involves daytime engineering work and does not directly compete for on-sky time
+\begin{itemize}
+  \item Dome thermal environment -- Section \ref{sec:dome}
+  \item Heat sources near optical beam -- Section \ref{sec:beam}
+\end{itemize}
+Progress in these environment control areas is expected to be incremental over time.
+
+The other areas are expected to improve the overall consistency of performance across the range of observing conditions.
+Several of these investigations require analyses of the accumulated telemetry from extended periods of survey operations, and accordingly, these optimization efforts will likely extend into calendar year 2027.
+
+%\subsection{Summary of Open Issues}
+%The table below summarizes several outstanding open questions and exploratory efforts where issues are being diagnosed and detailed work plans are under development. Each item is discussed individually in Section 3.
+
+\section{High-priority Upcoming AOS Deployments}
+\label{sec:aos_deployments}
+
+We describe specific areas of active research and development with more details on current challenges and plans for each area.
+
+\subsection{Donut Selection and Fit Quality}
+\label{sec:donut}
+
+Several improvements for reliable wavefront retrieval are being investigated.
+We discuss several of these investigations in turn below.
+
+First, the current online wavefront estimation pipeline identifies donut images for fitting on each individual image from the corner wavefront sensors during runtime.
+Provided that the telescope pointing model is sufficiently accurate, improvements in both computational speed and robustness could be achieved by using a catalog of bright isolated stars to identify donut images for fitting, which is the baseline method of donut selection.
+The pointing model is connected to open-loop and closed-loop corrections applied by the AOS since the AOS applies corrections to the hexapods (Section \ref{sec:tracking}).
+As a result, there have been multiple iterations to refine the pointing model as the AOS is developed in parallel.
+
+Second, the corner wavefront sensors are located at the periphery of the field of view ($\sim$1.7 deg off boresight) where the pupil shape is affected by vignetting due to the Camera body, as well as the M2 edge, M3 edge, and Camera L1 entrance and filter entrance intruding on the M1 annulus.
+The most highly vignetted parts of the corner wavefront sensors are currently excluded from the online wavefront estimation pipeline.
+Measurements of optical baffles around M1M3 have been acquired at the summit to more accurately model the absolute pupil size.
+There are ongoing studies to validate and refine the pupil model used for wavefront estimation.
+
+Third, for speed of the online wavefront estimation (Section \ref{sec:aos_latency}), ``donut'' pixel images are binned to 2$\times$2 before fitting.
+Direct comparison of the retrieved optical aberrations using binned (2$\times$2) versus unbinned (1$\times$1) donut images shows some significant differences, including spatial structure across the field of view in fits of full array mode data which might be attributed to variations in the pupil model.
+If the 1x1 binning is needed, further work to speed up the online wavefront estimation pipeline will be required.
+
+There are also ongoing studies to validate the numerical stability and robust convergence of fitting routines, to optimize the donut quality selection criteria, and to improve the fidelity of the optical model to approach fit residuals that are consistent with statistical noise.
+A variety of internal consistency checks can be performed, e.g., comparing fits from neighboring donuts on the focal plane, comparing the repeatability of fits from consecutive visits with the same optical state, and comparing fits for pupil images of different sizes corresponding to pistoning the focal plane across a range of intra- and extra-focal positions.
+
+Improvements for the wavefront retrieval will be primarily developed through offline analyses.
+Once specific algorithms and configuration settings for the wavefront estimation pipeline have been tested in offline analyses and are ready to be validated on sky, they will be first evaluated using FBS-driven closed loop stability tests (1-2 hrs per configuration change) before progressing to standard survey observations.
+
+\subsection{Optimized Optical State (Fixed Pointing)}
+\label{sec:optical_state_fixed}
+
+After running many iterations of the AOS closed loop at fixed telescope pointing (elevation, azimuth, Camera rotator angle, filter), we find that there are often systematic differences between the measured wavefront across the field of view and the optical model for the intrinsic wavefront (or reference wavefront) that defines the target optical state that the AOS is trying to converge towards.
+
+Possible explanations for these differences include the following:
+\begin{enumerate}
+  \item wavefront retrieval is systematically inaccurate (Sections \ref{sec:donut} and \ref{sec:intra-extra})
+  \item optical model for the intrinsic wavefront across the field of view, including corner wavefront sensors, is an inaccurate description of the as-built system (i.e., physically cannot be realized)
+  \item enabled linear combinations of degrees of freedom are insufficient to drive the system towards to target optical state
+  \item information from the corner wavefront sensors alone is insufficient to fully specify the set of linear combinations of degrees of freedom that are needed to drive the system towards to target optical state
+\end{enumerate}
+
+Current analyses imply that multiple of these issues are present at some level, and we are developing approaches to address each issue.
+
+As a first step towards addressing the accuracy of the intrinsic wavefront model, the team has deployed a set of calibrated offsets for each of the corner wavefront sensors using the measured residual optical aberrations (defocus in particular) from a selection of recent best quality images. These calibrated intrinsics have noticeably reduced the residual defocus tilt across the focal plane and produced more stable on-sky results. The calibrated offsets likely provide a more accurate model of absolute differences in the heights of each corner wavefront sensor relative to the array of science detectors.
+
+A more comprehensive approach is to use full array mode (FAM) observations with the entire focal plane array of science detectors pistoned to intra- and extra-focal positions to study how the optical wavefront varies across the full focal plane. Aberrations in the measured wavefront can be described using a Double Zernike (k, j) basis for the wavefront (pupil Zernikes indexed by j), and its variation across the field of view (focal Zernikes indexed by k). The pupil Zernikes can be measured up to at least j = 22. Measurements with the four corner wavefront sensors located at the periphery of the field of view can fully constrain the lowest order focal Zernikes — common mode (k=1) and dipole (k=2, k=3) variations — but only partially constrain higher order focal Zernikes — in particular, “bowl” (k = 4) and quadrupole (k=5, k=6) variations. FAM measurements are needed to fully constrain the k>=4 focal Zernikes.
+
+In order to minimize degeneracy, and to control the degrees of freedom that are most constrained by information from the corner wavefront sensors, the AOS closed loop is currently using 22 of the 50 effective degrees of freedom available.
+
+The planned path forward is to use FAM data to directly measure the intrinsic wavefront and derive open-loop corrections for the optical aberrations that are not well constrained by measurements with the corner wavefront sensors alone. Initially, we expect this to be applied as a fixed ``average'' correction that is only optimal for a single fixed telescope pointing, likely using a larger number of degrees of freedom than used for the AOS closed loop. Initial versions of this analysis are already in progress, and will require on-sky validation using AOS closed loop stability tests (1-2 hours for each configuration update).
+
+\subsection{Optimized Optical State (Survey Mode)}
+\label{sec:optical_state_survey}
+
+To extend the work above (Section \ref{sec:optical_state_fixed}) and achieve an optimal optical state across the field of view for any telescope pointing, we intend to build a refined open loop model or look-up table (LUT) of the calibrated intrinsics as a function of telescope elevation and Camera rotator angle using FAM measurements.
+
+Initial sets of FAM measurements have already been acquired for a grid of telescope elevation and Camera rotator angles, and show that there are repeatable (i.e., predictable) changes of optical aberrations across the field of view between telescope pointings.
+Those measurements also show that optical aberrations across the field of view (e.g., expressed in a double Zernike basis, see Section \ref{sec:optical_state_fixed}) can vary on the timescale of minutes even at fixed telescope pointing with no commanded changes in the optical state due to latent variables in the system (e.g., temperature changes of the telescope structure and temperature gradients across the primary-tertiary mirror).
+To control optical aberrations across the field of view while in wide-area survey mode, we have developed an approach to measured intrinsic open-loop model by taking FAM measurements while alternating from two telescope elevations or two Camera rotator angles in rapid succession to mitigate the effects of temporal drifts in the optical state. By taking such ``FAM bounce test'' observations at a range of telescope pointings, we can build the measure intrinsic open-loop model for arbitrary pointing. This LUT will then be applied differentially as the telescope scans the sky.
+
+Longer term, this open-loop model might be further improved by including additional variables for system telemetry, as described in Section \ref{sec:open_loop_optimization}.
+
+\subsection{AOS Closed Loop Correction Latency}
+\label{sec:aos_latency}
+
+The AOS closed loop design specifies that optical corrections derived from visit index N be applied to visit index N+2. Given the exposure time and typical gap time between successive visits, achieving N+2 latency requires that the total time delay between shutter close and delivery of optical wavefront measurements must be less than ~34 seconds, including readout, image ingest, instrumental signature removal, and wavefront estimation.
+
+Currently, the system is capable of achieving N+2 most of the time, and N+3 in most remaining instances, with occasional outliers to N+4 and larger latency.
+Most of possible timing improvements in the Camera DAQ, image ingest, and instrument signature removal have been realized, and further gains will involve optimization of the wavefront estimation pipeline, including robust selection of good quality pupil images (Section \ref{sec:donut}), optimizing fit convergence, and investigation of alternative faster online wavefront estimation approaches (see Section \ref{sec:aos_ml}).
+Nearly all of this work involves offline analysis and development, and the latency impacts on the control loop can be evaluated in offline analysis (Section \ref{sec:aos_control}) prior to deploying at the summit.
+
+Longer term, further optimization efforts could be pursued to reduce latency in crowded fields attributed to fitting blended donuts.
+
+\subsection{AOS Closed-loop Control Algorithm}
+\label{sec:aos_control}
+
+The AOS closed loop currently uses a PID control algorithm.
+To mitigate the impact of the typical 2-visit latency between measurement and applied correction (Section \ref{sec:aos_latency}), corrections derived from intermediate visits between a measurement and application of the corresponding closed loop corrections are currently being discarded to avoid overcorrection.
+The Integrated term of the PID controller is currently set to zero, since there were other issues with the wavefront retrieval and the reference wavefront.
+Data to include noise in the control loop has been taken for about 1 year to build a covariance term to minimize the noise impact but is not implemented yet.
+
+While some improvements could be achieved by tuning parameters of the current PID controller, alternative control algorithms better matched to address latency (e.g., Smith Predictor) and uncertainties in the wavefront measurement are likely needed to achieve faster and more robust convergence.
+
+This area also includes investigation and handling of edge cases, such as logic around large slews and filter changes.
+
+We have developed a method to reproduce the open loop behavior of the optical system (i.e., backing out the accumulated effect of applied ``tweaks'') for the full set of archival Rubin observations in order to accurately simulate and compare the expected performance of PID controllers with different parameters, as well as alternative control algorithms, in offline analyses.
+Accordingly, control algorithms can be developed within minimal required on-sky engineering time, with targeted on-line validation of specific proposed updates.
+The anticipated needs for dedicated on-sky engineering are at the level of 1-2 hours for FBS-driven closed loop stability after a configuration change, followed by standard survey observations.
+
+\subsection{Tracking Drift}
+\label{sec:tracking}
+
+In general, corrections applied by the AOS to improve the optical focus and alignment also induce telescope pointing offsets.
+This is most apparent when the AOS applies hexapod tip/tilt or translational corrections. Large pointing model errors result in tracking drift during the standard 30 second exposures that contributes to the PSF size and shape (ellipticity).
+
+Pointing offsets related to the AOS optics corrections are predictable based on the telescope optical model, and thus can be pre-emptively compensated by the pointing control loop.
+A sensitivity matrix relates changes in each optical degree of freedom to two-dimensional offsets in the camera coordinate system.
+Recent work on the closed loop operations enables synchronization of the AOS and pointing corrections within the standard slew-and-expose sequence, and these AOS pointing corrections have now been validated on sky.
+Next steps include an update of the core pointing model, potentially adjusting zero point offsets and other terms of the model.
+
+Further work on the AOS might necessitate additional pointing model work.
+On-sky validation of the pointing accuracy and synchronized AOS and pointing corrections can be accomplished through standard sequences of the AOS closed loop initial focus and alignment at the start of night, and during regular wide-area survey observations, and thus minimal dedicated on-sky engineering is expected.
+
+\subsection{Angle of Incidence Throughput Effect}
+\label{sec:angle_of_incidence}
+
+The Rubin/LSSTCam filters are interference filters with photometric throughput that depend on the Angle of Incidence.
+The Angle of Incidence varies from the center to the edge of each ``donut'' pupil image, so the throughput (and hence resulting intensity) varies with radius inside the donut.
+This Angle of Incidence throughput effect is the leading candidate explanation for the AOS difficulty in the u and y bands, where the angle of incidence correction is roughly four times larger than in the mid-bands, potentially impacting the pupil and therefore focus.
+
+The angle of incidence correction has now been implemented in the baseline wavefront estimation pipeline (Danish 1.1) and on-sky validation began in early June.
+A full lunation is likely needed to comprehensively validate the correction on sky, as only one of u or y filters is installed at a given time.
+
+Minimal dedicated on-sky engineering time is needed for diagnostic measurements and on-sky validation, at the level of 1-2 hours for u and 1-2 hours for y.
+
+\section{Ongoing Optimization of the Environmental Control}
+\label{sec:environment}
+
+\subsection{Dome thermal environment}
+\label{sec:dome}
+
+A major objective of the coming year is to reduce dome seeing through improved thermal conditioning and ventilation of the dome. 12 of the total 34 dome louvers are currently being used in regular nighttime operations, including 6 electromechanically operated louvers and 6 pneumatic louvers.
+The baseline plan is to have only electromechanically operated louvers and all 34 should be operable by the end of the calendar year.
+We could add some pneumatic louvers but they are not remote controlled meaning they are fully open during the entire night and  they do not provide telemetry.
+The team is investigating the procurement of additional pneumatic louvers to accelerate the availability of louvers for nighttime operation, especially as we are headed towards installing and operating the Light and Wind Screen panels that will close the dome and change the impact of the wind on the dome temperature.
+
+Note that with 10 additional pneumatic louvers for a total of 22 louvers, we will have opened all the large louvers and expect to gain almost all the benefits of the complete set of 34. Even with 12 louvers open, we see evidence that the dome seeing is correlated with wind speed and telescope pointing relative to the wind direction and wind speed.
+Typical dome seeing is likely at the level 0.3'' –- 0.4'', with relatively lower (higher) contributions pointing into (away from) the wind direction at moderate wind speeds.
+The dome seeing contribution is expected to be independent of the pointing direction once additional dome louvers are active.
+
+Additional work related to the dome thermal environment involves increasing the cooling capacity load of the air handling units, increasing insulation for thermal sources/ingress points in the dome and pier, and optimizing operation of the downdraft airflow to inhibit convective heat transfer from lower areas of the Summit Facility into the dome environment.
+
+Nearly all of the dome thermal environment work involves daytime engineering, with no dedicated on-sky engineering required.
+
+\subsection{M1M3 thermal control}
+\label{sec:m1m3_thermal}
+
+The M1M3 mirror is a cast borosilicate monolith whose shape is extremely sensitive to temperature.
+Temperature-controlled air enters each honeycomb cell of the mirror through an air nozzle, before returning and being reconditioned by fan coil units.
+The mirror is cooled to stay $\sim$1 C below ambient throughout the night to minimize mirror seeing. However, with its high thermal coefficient of expansion and large variation in thickness across the monolith, the optical figure of M1M3 is sensitive to temperature gradients that are induced by rapidly cooling the mirror.
+Some optical aberrations, spherical aberrations in particular, are excited almost entirely by M1M3 thermal gradients, and are not readily controlled by any of the M1M3 mirror bending modes.
+
+There is ongoing hardware work to adjust the sizes and locations of the air nozzle orifices to better match the flow rate to the local thickness of M1M3 and thus provide a more uniform cooling effect across the monolith.
+
+There are also pending improvements for the M1M3 thermal control system, including development of more accurate weather forecasting tools for Cerro Pach\'{o}n.
+One approach currently being explored is to reduce the maximum rate of change for the M1M3 temperature set point to avoid inducing large temperature gradients.
+Another is to work with an Italian collaborator who has a validated forecasting model for other observatories such as the E-ELT.
+
+Effectively all of the M1M3 thermal control work involves daytime engineering, offline analyses, and testing in parallel with on-sky observations.
+
+\subsection{Heat sources near optical beam}
+\label{sec:beam}
+
+Rubin Observatory performs routine thermal surveys using an IR camera to identify individual heat sources near the telescope beam and develop mitigation plans for each source. Over the past months, this work has led to substantial reduction of heat sources around the telescope structure, Top End Assembly, and Camera body.
+A recent example mitigation is the installation of a neoprene thermal shroud covering the Camera hexapods legs where the optical beam crosses three times before reaching the focal plane.
+
+For each individual thermal source, the mitigation approach is specific to the individual subsystem component, typically involving software controls (e.g., to reduce heat generation through more optimized duty cycle), increasing thermal insulation, or adjusting thermal control loops.
+Specific examples include enabling a feature to idle the hexapod motors between commanded movements to reduce heat generation, and turning off the M1M3 mirror cover motors while observing.
+
+As with the other thermal environment work areas, the activity is primarily daytime engineering with no dedicated on-sky testing required.
+
+\section{Longer Term AOS Optimization}
+\label{sec:aos_optimization}
+
+\subsection{Difference in Intra- versus Extra-focal Donuts}
+\label{sec:intra-extra}
+
+The current baseline wavefront estimation pipeline performs a simultaneous fit of intra- and extra-focal pupil images on the two halves of each corner wavefront sensor, specifically, considering pairs of intra- and extra-focal pupil images.
+Visual comparisons of the intra- and extra-focal pupil images clear differences that are not yet fully understood, in particular, that the extra-focal pupil images have more sharply defined features (e.g., edges of the pupil including shadows from the spider struts that support the telescope top end assembly).
+Moreover, we find systematic differences between measured Zernikes of the optical wavefront when separately fitting the intra- and extra-focal pupil images.
+%[Mention that similar effects were observed in DECam?]
+In practice, the extra-focal pupil fit results currently dominate the overall wavefront measurements.
+
+Investigations into possible physical origins of apparent differences in the intra- and extra-focal images are under way, including studies of the pupil model (Section \ref{sec:donut}) and subtle diffraction effects.
+While some data has already been acquired to compare wavefront measurements from a range of pupil image sizes using focus sweeps, additional diagnostic data might be required, for example, targeting a bright star and gradually moving from in-focus to ``giant donuts'' to examine the behavior of donut features.
+
+\subsection{ML-based Wavefront Estimation Methods}
+\label{sec:aos_ml}
+
+The team is currently pursuing two machine learning (ML) approaches for wavefront estimation.
+
+The first approach involves an emulator for the current baseline wavefront estimation pipeline that is trained to reproduce the results of the conventional wavefront estimation pipeline.
+By construction, the emulator approach can only be as accurate as the conventional wavefront estimation pipeline, but still offers two important potential improvements: rapid inference to reduce correction latency and increased precision / reliability given a sufficiently large and carefully curated training dataset.
+This method is more robust to seeing conditions and blending donuts, making it valuable in dense fields.
+
+The second ML-based approach is a fully independent model trained to infer the optical wavefront and associated optical state directly from simulated pupil images.
+In addition to the potential advantages noted above, this approach has the potential to serve as an independent validation and/or alternative to the conventional wavefront estimation pipeline.
+The accuracy of this approach could ultimately be limited by the accuracy of the optical model used to train the model.
+
+\subsection{Image Quality Optimization and Survey Strategy}
+\label{sec:survey_strategy}
+
+The distribution of delivered image quality is connected to the survey strategy through the distribution of telescope pointing elevation angles (i.e., airmass), distribution of telescope slew distances in elevation angle and Camera rotator angle, and effects related to the dome thermal environment and ventilation such as pointing direction relative to the wind vector (see Section \ref{sec:dome}).
+
+Given other expected improvements for the delivered image quality described in this technote, priorities for the first year of the LSST survey, and needs for statistical characterization of the distribution of atmosphere seeing at the Simonyi Survey Telescope, joint optimization of delivered image quality and survey strategy might be an exercise better suited for after the first year of LSST.
+Any potential modifications to the survey strategy would need to be carefully considered, and technical recommendations passed to the Survey Cadence Optimization Committee (SCOC) for review.
+For example, constraints on telescope pointing relative to the wind direction could have impacts consequences for the survey coverage given the prevailing wind direction at Cerro Pach\'{o}n.
+
+\subsection{Tempertaure LUT}
+\label{sec:temp_lut}
+
+This area of investigation broadly covers mitigations for image quality impacts attributed to the changing in-dome thermal environment at the Simonyi Survey Telescope. Specific known issues include
+\begin{enumerate}
+  \item a rapidly changing optimal focus (~100 microns dz in an hour compared to a depth of focus ~10 microns wide in dz) that is at least partially correlated with temperature readings on the surface of the telescope mount assembly structure, and
+  \item changes in the optical figure of M1M3 (e.g., characterized using a basis of double Zernike for the optical wavefront aberrations in FAM data) are at least partially correlated with temperature gradients across M1M3
+\end{enumerate}
+
+Currently, there is a focus offset LUT for each filter and a two-dimensional LUT for telescope elevation and rotator angle. As other aspects of the AOS stabilize, and telemetry correlation analyses are performed with additional survey data, further image quality gains might be realized by incorporating additional telemetry streams into open loop AOS corrections.
+For example, additional temperature sensors on the telescope structure and for M1M3 might be more predictive of the rapid focus drifts.
+M1M3 thermal gradients might be used to predict mirror figure changes that are not easily measured using the corner wavefront sensors.
+
+\subsection{Complete Optimization of the Open-loop Model}
+\label{sec:open_loop_optimization}
+
+This item extends the open-loop modeling work described in Section \ref{sec:optical_state_survey} with further refinements that incorporate telemetry from an extended period of survey observations sampling a range of environment conditions.
+The work includes analyses of trends for the applied corrections (and wavefront residuals) as a function of parameters such as elevation and rotation.
+Optimization of the open-loop model will need to be considered together with the measured intrinsics.
+
+\section{Methodology Notes and Resources}
+\label{sec:methodology}
+
+We provide supplemental information on general principles for work management, version control, and the development of on-sky tests.
+
+\subsection{Work Management}
+
+Analysis and development tasks to support image quality improvements are captured, ranked by priority, and have their progress and outcomes recorded used the Jira epic \href{https://rubinobs.atlassian.net/browse/RSO-9}{RSO-9}.
+
+\subsection{Version Control}
+
+All of the planned AOS improvement tests will be interleaved with routine survey operations. From May 2026 onwards, there is increased emphasis on stable delivery of acceptable science-grade images, even as new AOS features and configuration updates are deployed to the summit. It is essential to ensure rigorous tracking of code versions, configurations of the MTAOS, open loop LUT version, intrinsic aberration model, values of any constant offsets applied, number of degrees of freedom enabled and truncation index for the basis of characteristic non-degenerate v-modes. Software versions deployed at the summit will be tagged following a standardized convention.
+
+Process for deployment of new algorithm/versions/configuration at the summit:
+\begin{itemize}
+  \item Maintain 2-3 day look-ahead for specific upcoming deployments to coordinate with on-sky test planning
+  \item Proposed configuration changes must be approved by the Software Versioning Acceptance Board (SVAB) prior to be deployed at the summit
+  \item Summit deployments that are not completed before the tailgate 4:30pm Chile will be postponed to the next opportunity
+  \item Preference to schedule deployments Tuesday-Thursday; Monday + Friday as second choice; Deployment on Saturday and Sunday will only be for emergency fixes.
+  \item Preference for atomic updates; avoid more than one new deployment per night and all deployments need to be tracked using the confluence page above.
+  \item Before deployment, determine what is the current stable tagged configuration version that we would revert to if needed
+  \item After deployment, use the following sequence of on-sky tests to evaluate performance
+  \begin{itemize}
+    \item FBS-driven closed loop stability for 1-2 hrs at fixed telescope (elevation, azimuth, rotator angle, filter)
+    \item Pre-LSST to evaluate performance in wide-area survey mode
+  \end{itemize}
+\end{itemize}
+
+Resources used
+\begin{itemize}
+  \item Software Versioning Acceptance Board \href{https://rubinobs.atlassian.net/wiki/spaces/LSSTOps/pages/1248460829/Software+Versioning+Acceptance+Board}{Confluence page}
+  \item Tracking AOS Deployment \href{https://rubinobs.atlassian.net/wiki/spaces/LTS/pages/1681391688/AOS+Deployment+Status}{Confluenc page}
+  \item Spreadsheet w/ configuration status: AOS Configuration Changes
+\end{itemize}
+
+\subsection{On-sky Test Planning}
+
+The Rubin Observatory Summit Facility Concept of Operations is described in \citep{RTN-094}.
+
+During the current period with frequent AOS configuration updates and dedicated on-sky engineering tests interleaved with survey observations on a regular basis (e.g., multiple nights per week), we have used test planning on 1-2 week timescales to help connect strategic priorities to the development and execution of individual night test plans. The 1-2 week planning timescale facilitates development of new observing blocks, arranging the schedule of specific feature deployments, and coordinating with other summit activities, including daytime engineering and summit software updates. We outline draft day-by-day test plans with a ~7 day lookahead, and detailed day-by-day plans with a 2-3 day lookahead.
+
+Reminder of the sources used
+\begin{itemize}
+  \item Week Test Plan (\href{https://rubinobs.atlassian.net/wiki/spaces/LSSTCOM/pages/68255748/Week+Test+Plan+Meeting+Notes}{Confluence pages}, Canvas)
+  \item Day-by-day detail test planning (maintain 2-3 day look-ahead) Canvas
+\end{itemize}
+
 
 \appendix
 
